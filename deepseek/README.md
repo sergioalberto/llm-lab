@@ -1,5 +1,4 @@
-# llm-lab
-Let's do some experiments with some LLMs
+# DeepSeek lab
 
 ```sh
 python -m venv venv
@@ -16,6 +15,12 @@ python download_model.py
 ```sh
 curl -fsSL https://ollama.com/install.sh | sh
 ollama run deepseek-r1:8b
+
+python ollama_app.py
+
+# In Google Cloud
+gcloud beta run deploy --gpu 1 --image ollama/ollama --port 114434
+OLLAMA_HOST=https://ollama-[PROJECT].us-central1.run.app ollama run deepseek-r1:8b
 ```
 
 ### References
