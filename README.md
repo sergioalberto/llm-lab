@@ -1,2 +1,4 @@
 # LLMs-Lab
-Let's do some experiments with some LLMs
+Let's do some experiments with some LLMs.
+
+- [DeepSeek](/deepseek)

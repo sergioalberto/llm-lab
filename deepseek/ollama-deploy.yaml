@@ -1,0 +1,60 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: ollama
+  generation: 4
+  labels:
+    cloud.googleapis.com/location: us-central1
+  annotations:
+    run.googleapis.com/client-name: cloud-console
+    run.googleapis.com/launch-stage: BETA
+    run.googleapis.com/ingress: all
+    run.googleapis.com/ingress-status: all
+    run.googleapis.com/minScale: '1'
+spec:
+  template:
+    metadata:
+      labels:
+        run.googleapis.com/startupProbeType: Default
+      annotations:
+        autoscaling.knative.dev/maxScale: '7'
+        run.googleapis.com/client-name: cloud-console
+        autoscaling.knative.dev/minScale: '1'
+        run.googleapis.com/cpu-throttling: 'false'
+        run.googleapis.com/startup-cpu-boost: 'true'
+    spec:
+      containerConcurrency: 4
+      timeoutSeconds: 300
+      serviceAccountName: 570351480416-compute@developer.gserviceaccount.com
+      containers:
+      - name: ollama-1
+        image: us-east1-docker.pkg.dev/project-1-test-ai/cloud-run-source-deploy/ollama
+        ports:
+        - name: http1
+          containerPort: 8080
+        env:
+        - name: OLLAMA_NUM_PARALLEL
+          value: '4'
+        resources:
+          limits:
+            cpu: 8000m
+            nvidia.com/gpu: '1'
+            memory: 32Gi
+        volumeMounts:
+        - name: in-memory-1
+          mountPath: /models
+        startupProbe:
+          timeoutSeconds: 240
+          periodSeconds: 240
+          failureThreshold: 1
+          tcpSocket:
+            port: 8080
+      volumes:
+      - name: in-memory-1
+        emptyDir:
+          medium: Memory
+          sizeLimit: 20G
+      nodeSelector:
+        run.googleapis.com/accelerator: nvidia-l4
+  traffic:
+  - percent: 100

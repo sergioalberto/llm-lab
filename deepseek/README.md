@@ -11,21 +11,44 @@ python download_model.py
 ```
 
 
-### Run DeepSeek with Ollama
+### Run DeepSeek with Ollama in Local
 ```sh
 curl -fsSL https://ollama.com/install.sh | sh
 ollama run deepseek-r1:8b
 
 python ollama_app.py
+```
 
-# In Google Cloud with GPU
-gcloud beta run deploy --gpu 1 --image ollama/ollama --port 114434
-OLLAMA_HOST=https://ollama-[PROJECT].us-central1.run.app ollama run deepseek-r1:8b
-
-# In Google Cloud without GPU
+### Run DeepSeek with Ollama in Cloud
+```sh
+# Build and publish image
 gcloud builds submit --tag us-east1-docker.pkg.dev/project-1-test-ai/cloud-run-source-deploy/ollama --machine-type e2-highcpu-32
 
-gcloud run deploy ollama --image us-east1-docker.pkg.dev/project-1-test-ai/cloud-run-source-deploy/ollama --region us-central1 --concurrency 4 --cpu 8 --set-env-vars OLLAMA_NUM_PARALLEL=4 --max-instances 7 --memory 32Gi --allow-unauthenticated --no-cpu-throttling --service-account 570351480416-compute@developer.gserviceaccount.com --timeout=600
+# Deploy the service
+gcloud run services replace ollama-deploy.yaml
+
+# Load the Deepseek model
+curl --location 'https://ollama-570351480416.us-central1.run.app/api/pull' \
+--header 'Content-Type: application/json' \
+--data '{
+    "name": "deepseek-r1:8b",
+    "stream": true
+}'
+
+# Let's test it
+curl --location 'https://ollama-570351480416.us-central1.run.app/api/chat' --header 'Content-Type: application/json' --data '{
+    "model": "deepseek-r1:8b",
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are an assistant that helps people"
+        },
+        {
+            "role": "user",
+            "content": "What are the advantages of deploying my own LLM?"                                                          }
+    ],
+    "stream": false
+}'
 ```
 
 ### References
