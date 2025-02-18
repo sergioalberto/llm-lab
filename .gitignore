@@ -171,3 +171,5 @@ cython_debug/
 .pypirc
 
 model_weights/
+qdrant_storage/
+
