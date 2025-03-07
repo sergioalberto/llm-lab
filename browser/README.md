@@ -38,3 +38,4 @@ python webui.py --ip 127.0.0.1 --port 7788
 ### References
 - https://github.com/browser-use/browser-use?tab=readme-ov-file
 - https://docs.browser-use.com/customize/supported-models
+- https://github.com/convergence-ai/proxy-lite
