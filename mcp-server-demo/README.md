@@ -1,4 +1,4 @@
-## MCP Sample
+## Model Context Protocol (MCP) Sample
 
 ### Setup
 ```
@@ -13,3 +13,7 @@ uv run mcp run server.py
 
 uv run server.py
 ```
+
+### References
+- https://modelcontextprotocol.io/introduction
+- https://google.github.io/adk-docs/mcp/
