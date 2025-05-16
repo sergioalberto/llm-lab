@@ -3,3 +3,4 @@ mcp==1.8.0
 toolbox-core==0.1.0
 agent-starter-pack==0.3.9
 llama-index==0.12.35
+Flask===3.1.1
