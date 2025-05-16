@@ -1,9 +1,11 @@
+import vertexai
 import asyncio
 
 from flask import Flask, request, jsonify
 from google.adk.agents import Agent, LlmAgent
 from google.adk import Runner
 from google.adk.sessions import InMemorySessionService, BaseSessionService
+from google.adk.tools.retrieval import VertexAiRagRetrieval
 from vertexai.preview import rag
 from vertexai.generative_models import GenerativeModel, SafetySetting, Tool, ChatSession
 from vertexai.preview.prompts import Prompt
@@ -14,12 +16,31 @@ APP_NAME = "agents_app"
 
 app = Flask(__name__)
 
+vertexai.init(project="project-1-test-ai", location="us-central1")
+
+cv_vertex_retrieval = VertexAiRagRetrieval(
+    name='retrieve_rag_documentation',
+    description=(
+        'Use this tool to retrieve documentation and reference materials for the question from the RAG corpus,'
+    ),
+    rag_resources=[
+        rag.RagResource(
+            # please fill in your own rag corpus
+            # here is a sample rag coprus for testing purpose
+            # e.g. projects/123/locations/us-central1/ragCorpora/456
+            rag_corpus="projects/570351480416/locations/us-central1/ragCorpora/2738188573441261568"
+        )
+    ],
+    similarity_top_k=10,
+    vector_distance_threshold=0.5,
+)
+
 cv_agent = LlmAgent(
     model="gemini-2.0-flash",
     name="cv_agent",
     description="Answers any user question about resumes",
     instruction="You are a helpful agent who can answer user questions about curriculum vitaes.",
-    tools=[google_search]
+    tools=[cv_vertex_retrieval]
 )
 
 # Define a simple agent
