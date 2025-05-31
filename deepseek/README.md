@@ -51,6 +51,28 @@ curl --location 'https://ollama-570351480416.us-central1.run.app/api/chat' --hea
 }'
 ```
 
+### Deploy DeepSeek with Google Cloud
+```
+import vertexai
+from vertexai.preview import model_garden
+
+vertexai.init(project="project-1-test-ai", location="us-central1")
+
+model = model_garden.OpenModel("deepseek-ai/deepseek-r1@deepseek-r1-distill-llama-8b")
+endpoint = model.deploy(
+  accept_eula=True,
+  machine_type="g2-standard-24",
+  accelerator_type="NVIDIA_L4",
+  accelerator_count=2,
+  serving_container_image_uri="us-docker.pkg.dev/deeplearning-platform-release/vertex-model-garden/vllm-inference.cu121.0-6.ubuntu2204.py310",
+  endpoint_display_name="deepseek-ai_deepseek-r1-distill-llama-8b-mg-one-click-deploy",
+  model_display_name="deepseek-ai_deepseek-r1-distill-llama-8b-1748716110143",
+  fast_tryout_enabled=True,
+)
+```
+![Example here](deepseek-gcp.png)
+
+
 ### References
 - https://github.com/deepseek-ai/DeepSeek-V3
 - https://github.com/khanfar/DeepSeek-V3-Windows-Installation-Guide
