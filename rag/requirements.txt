@@ -6,3 +6,9 @@ unstructured==0.18.11
 sentence-transformers==5.0.0
 faiss-cpu==1.11.0
 ollama==0.5.1
+chromadb==1.0.15
+fastapi==0.116.1
+uvicorn==0.35.0
+psycopg2-binary==2.9.10
+pgvector==0.3.6
+langchain-postgres==0.0.15
